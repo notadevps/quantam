@@ -8,7 +8,9 @@ const cors = require('cors');
 
 app.use(cors());
 app.use(express.json()); 
+//all routes related to user login or register
 app.use('/api/user', UserRouter); 
+//if user has validated his token then he can view the table
 app.use('/api/table', TableRouter);
 
 app.listen(env.port, () => { 

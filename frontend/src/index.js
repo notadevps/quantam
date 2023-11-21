@@ -1,3 +1,13 @@
+/**
+ * Assigment sumbitted by Sahil Arora
+ * Date 21/10/23
+ * Reactjs used for frontend
+ * nodejs used for backend
+ * mongoose used for backend
+ */
+
+
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';

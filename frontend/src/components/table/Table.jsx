@@ -9,14 +9,12 @@ import { useSnackbar } from 'notistack';
 import { pageState as PAGE_STATE } from '../../utils/state';
 import { Oval } from 'react-loader-spinner';
 
-
-const centerDiv = {
-    display: 'flex',
-    height: '100vh', 
-    width: '100%', 
-    justifyContent: 'center',
-    alignItems: 'center'
-}
+/*
+    Can only be viewed by logged in user
+    10 rows per page 
+    5 pages 
+    50 total rows
+*/
 
 
 const Table = () => {
@@ -46,7 +44,6 @@ const Table = () => {
     }, [])
 
     useEffect(() => {
-        console.log(pageState);
         if (pageState.state === PAGE_STATE.ERROR) {
             enqueueSnackbar(pageState.message || "error occured", { variant: 'error', autoHideDuration: '10s' }); 
         } else if (pageState.state === PAGE_STATE.ACCEPTED) {
@@ -54,11 +51,11 @@ const Table = () => {
         }
     }, [pageState])
 
+
+    //display loading screen when page state is loading
     if (pageState.state === PAGE_STATE.LOADING) {
         return (
-            <div 
-                style={centerDiv}
-            >
+            <div style={base.center}>
                 <Oval
                 height={80}
                 width={80}
@@ -77,10 +74,10 @@ const Table = () => {
         
     }
 
-
+    //display error when page state has error which can be from token expired or any error from backend response
     if (pageState.state === PAGE_STATE.ERROR) {
         return (
-            <div style={centerDiv} >
+            <div style={base.center} >
                 <a href='/login'>Login</a>
             </div>
         )
@@ -114,7 +111,6 @@ const Table = () => {
                 </div>
                 <div className='tableRow'>
                     {Data.slice((selectedPage - 1) * 10, selectedPage * 10).map((data, i) => {
-                        console.log(data);
                         let dt = ((selectedPage - 1 ) * 10) + i ;
                         return (
                         <div className='tableRowBox' key={i} >
@@ -208,6 +204,7 @@ const TableStyle = styled.div`
         display: flex; 
         flex-direction: column;
         overflow: scroll;
+        min-width: 700px;
     }
 
     .tableRowBox {

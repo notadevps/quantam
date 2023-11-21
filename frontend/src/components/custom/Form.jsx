@@ -11,6 +11,14 @@ import { BsCalendar2Date } from "react-icons/bs";
 import { enqueueSnackbar } from 'notistack';
 import { useRef } from 'react';
 
+/*
+    User responsive Signup/login form
+    type (state) is the type of the page -> login page / signup page
+    pageState determines the state of the page. Is used to send erros and to see loading screen view User.jsx
+*/
+
+
+
 const Form = ({ type, setPageState, pageState }) => {
     const dateRef = useRef();
     const checkRef = useRef();
@@ -22,6 +30,11 @@ const Form = ({ type, setPageState, pageState }) => {
         email: ''
     })
 
+
+
+    /* if remember me is checked then this effect hook saves the user data 
+    in local storage other wise if its not checked it deletes the data if its there. Only runs when login/signup button is clicked
+    */
 
     useEffect(() => {
         if (type === formState.LOGIN) {
@@ -37,8 +50,6 @@ const Form = ({ type, setPageState, pageState }) => {
                 setInputData(signup);
             }
         }
-
-        console.log(type);
     }, [type])
 
     const changeInputData = (e, type) => {
@@ -52,6 +63,11 @@ const Form = ({ type, setPageState, pageState }) => {
             setInputData({...inputData, email: e.target.value });
         }
     }
+
+
+    /**
+     * Sends request to backend based on the current page type
+     */
 
     const sendReq = async () => {
         if (inputData.username.length <= 3 || inputData.username.length > 30) return enqueueSnackbar('Username length should be greater than 5 and less than 30 characters'); 
@@ -93,11 +109,8 @@ const Form = ({ type, setPageState, pageState }) => {
         }
     }
 
-    useEffect(() => {
-        console.log(type);
-    }, [type])
 
-
+    // display loading screen when page state is loading
     if (pageState.state === PAGE_STATE.LOADING) {
         return (
             <FormStyle>
@@ -142,11 +155,17 @@ const Form = ({ type, setPageState, pageState }) => {
                     </div>
                     { type === formState.SIGNUP ?  
                     <>
-                    <div className='inputBox' style={{ position: 'relative' }} onFocus={(e) => dateRef.current.showPicker()}>
+                    <div className='inputBox' style={{ position: 'relative' }} onClick={(e) => {
+                        try {
+                            dateRef.current.showPicker();
+                        } catch (e) {
+                            alert('er');
+                        }
+                    }}>
                         <BsCalendar2Date />
                         <div className='line'></div>
-                        <input type='text' placeholder='Date' value={inputData.date}   />
-                        <input ref={dateRef} type='date' placeholder='Date' onChange={(e) => changeInputData(e, formInputType.DATE)} value={inputData.date} />
+                        <input type='text' placeholder='Date' value={inputData.date}    />
+                        <input ref={dateRef} name='date' type='date' max={new Date().toISOString().split('T')[0]} placeholder='Date' onChange={(e) => changeInputData(e, formInputType.DATE)} value={inputData.date} />
                     </div>
                     <div className='inputBox'>
                         <MdEmail />
@@ -258,6 +277,7 @@ const FormStyle = styled.div`
         padding: 1rem;
         color: ${props => props.theme.colors.btnTextColor};
         border-radius: 10px; 
+        cursor: pointer; 
     }
 
     .userProfile {

@@ -9,6 +9,13 @@ const theme = {
         tableTextRowColor: 'rgba(0, 0, 0, 0.8)',
         tableTextHeadColor: 'black',
     }, 
-    backendUrl: 'http://localhost:8000/api'
+    backendUrl: 'http://localhost:8000/api', 
+    center: {
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh', 
+        width: '100%', 
+    }
 }
 export default theme;
